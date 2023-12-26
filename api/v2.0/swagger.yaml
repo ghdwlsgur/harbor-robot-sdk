@@ -1,0 +1,548 @@
+swagger: "2.0"
+info:
+  title: Harbor API
+  description: These APIs provide services for manipulating Harbor project.
+  version: "2.0"
+host: localhost
+schemes:
+  - http
+  - https
+basePath: /api/v2.0
+produces:
+  - application/json
+  - text/plain
+consumes:
+  - application/json
+securityDefinitions:
+  basic:
+    type: basic
+security:
+  - basic: []
+  - {}
+paths:
+  /robots/{robot_id}:
+    get:
+      summary: Get a robot account
+      description: This endpoint returns specific robot account information by robot ID.
+      tags:
+        - robot
+      operationId: GetRobotByID
+      parameters:
+        - $ref: "#/parameters/requestId"
+        - $ref: "#/parameters/robotId"
+      responses:
+        "200":
+          description: Return matched robot information.
+          schema:
+            $ref: "#/definitions/Robot"
+        "401":
+          $ref: "#/responses/401"
+        "403":
+          $ref: "#/responses/403"
+        "404":
+          $ref: "#/responses/404"
+        "500":
+          $ref: "#/responses/500"
+    put:
+      summary: Update a robot account
+      description: This endpoint updates specific robot account information by robot ID.
+      tags:
+        - robot
+      operationId: UpdateRobot
+      parameters:
+        - $ref: "#/parameters/requestId"
+        - $ref: "#/parameters/robotId"
+        - name: robot
+          in: body
+          description: The JSON object of a robot account.
+          required: true
+          schema:
+            $ref: "#/definitions/Robot"
+      responses:
+        "200":
+          $ref: "#/responses/200"
+        "400":
+          $ref: "#/responses/400"
+        "401":
+          $ref: "#/responses/401"
+        "403":
+          $ref: "#/responses/403"
+        "404":
+          $ref: "#/responses/404"
+        "409":
+          $ref: "#/responses/409"
+        "500":
+          $ref: "#/responses/500"
+    patch:
+      summary: Refresh the robot secret
+      description: Refresh the robot secret
+      tags:
+        - robot
+      operationId: RefreshSec
+      parameters:
+        - $ref: "#/parameters/requestId"
+        - $ref: "#/parameters/robotId"
+        - name: robotSec
+          description: The JSON object of a robot account.
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/RobotSec"
+      responses:
+        "200":
+          description: Return refreshed robot sec.
+          schema:
+            $ref: "#/definitions/RobotSec"
+        "400":
+          $ref: "#/responses/400"
+        "401":
+          $ref: "#/responses/401"
+        "404":
+          $ref: "#/responses/404"
+        "403":
+          $ref: "#/responses/403"
+        "500":
+          $ref: "#/responses/500"
+    delete:
+      summary: Delete a robot account
+      description: This endpoint deletes specific robot account information by robot ID.
+      tags:
+        - robot
+      operationId: DeleteRobot
+      parameters:
+        - $ref: "#/parameters/requestId"
+        - $ref: "#/parameters/robotId"
+      responses:
+        "200":
+          $ref: "#/responses/200"
+        "400":
+          $ref: "#/responses/400"
+        "401":
+          $ref: "#/responses/401"
+        "403":
+          $ref: "#/responses/403"
+        "404":
+          $ref: "#/responses/404"
+        "500":
+          $ref: "#/responses/500"
+  /robots:
+    get:
+      summary: Get robot account
+      description: List the robot accounts with the specified level and project.
+      tags:
+        - robot
+      operationId: ListRobot
+      parameters:
+        - $ref: "#/parameters/requestId"
+        - $ref: "#/parameters/query"
+        - $ref: "#/parameters/sort"
+        - $ref: "#/parameters/page"
+        - $ref: "#/parameters/pageSize"
+      responses:
+        "200":
+          description: Success
+          headers:
+            X-Total-Count:
+              description: The total count of robot accounts
+              type: integer
+            Link:
+              description: Link refers to the previous page and next page
+              type: string
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Robot"
+        "400":
+          $ref: "#/responses/400"
+        "404":
+          $ref: "#/responses/404"
+        "500":
+          $ref: "#/responses/500"
+    post:
+      summary: Create a robot account
+      description: Create a robot account
+      tags:
+        - robot
+      operationId: CreateRobot
+      parameters:
+        - $ref: "#/parameters/requestId"
+        - name: robot
+          in: body
+          description: The JSON object of a robot account.
+          required: true
+          schema:
+            $ref: "#/definitions/RobotCreate"
+      responses:
+        "201":
+          description: Created
+          headers:
+            X-Request-Id:
+              description: The ID of the corresponding request for the response
+              type: string
+            Location:
+              description: The location of the resource
+              type: string
+          schema:
+            $ref: "#/definitions/RobotCreated"
+        "400":
+          $ref: "#/responses/400"
+        "401":
+          $ref: "#/responses/401"
+        "403":
+          $ref: "#/responses/403"
+        "404":
+          $ref: "#/responses/404"
+        "500":
+          $ref: "#/responses/500"
+parameters:
+  query:
+    name: q
+    description: Query string to query resources. Supported query patterns are "exact match(k=v)", "fuzzy match(k=~v)", "range(k=[min~max])", "list with union releationship(k={v1 v2 v3})" and "list with intersetion relationship(k=(v1 v2 v3))". The value of range and list can be string(enclosed by " or '), integer or time(in format "2020-04-09 02:36:00"). All of these query patterns should be put in the query string "q=xxx" and splitted by ",". e.g. q=k1=v1,k2=~v2,k3=[min~max]
+    in: query
+    type: string
+    required: false
+  sort:
+    name: sort
+    description: Sort the resource list in ascending or descending order. e.g. sort by field1 in ascending orderr and field2 in descending order with "sort=field1,-field2"
+    in: query
+    type: string
+    required: false
+  page:
+    name: page
+    in: query
+    type: integer
+    format: int64
+    required: false
+    description: The page number
+    default: 1
+  pageSize:
+    name: page_size
+    in: query
+    type: integer
+    format: int64
+    required: false
+    description: The size of per page
+    default: 10
+    maximum: 100
+  requestId:
+    name: X-Request-Id
+    description: An unique ID for the request
+    in: header
+    type: string
+    required: false
+    minLength: 1
+  robotId:
+    name: robot_id
+    in: path
+    description: Robot ID
+    required: true
+    type: integer
+responses:
+  "200":
+    description: Success
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+  "201":
+    description: Created
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+      Location:
+        description: The location of the resource
+        type: string
+  "202":
+    description: Accepted
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+  "400":
+    description: Bad request
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  "401":
+    description: Unauthorized
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  "403":
+    description: Forbidden
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  "404":
+    description: Not found
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  "405":
+    description: Method not allowed
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  "409":
+    description: Conflict
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  "412":
+    description: Precondition failed
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  "415":
+    description: Unsupported MediaType
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  "500":
+    description: Internal server error
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: "#/definitions/Errors"
+  OK:
+    description: "Success"
+  Created:
+    description: "Created"
+    headers:
+      Location:
+        type: string
+        description: The URL of the created resource
+  BadRequest:
+    description: "Bad Request"
+  Unauthorized:
+    description: "Unauthorized"
+  Forbidden:
+    description: "Forbidden"
+  NotFound:
+    description: "Not Found"
+  Conflict:
+    description: "Conflict"
+  PreconditionFailed:
+    description: "Precondition Failed"
+  UnsupportedMediaType:
+    description: 'The Media Type of the request is not supported, it has to be "application/json"'
+  InternalServerError:
+    description: "Internal Server Error"
+definitions:
+  Robot:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: The ID of the robot
+      name:
+        type: string
+        description: The name of the robot
+      description:
+        type: string
+        description: The description of the robot
+      secret:
+        type: string
+        description: The secret of the robot
+      level:
+        type: string
+        description: The level of the robot, project or system
+      duration:
+        type: integer
+        format: int64
+        description: The duration of the robot in days
+      editable:
+        type: boolean
+        x-omitempty: false
+        description: The editable status of the robot
+      disable:
+        type: boolean
+        x-omitempty: false
+        description: The disable status of the robot
+      expires_at:
+        type: integer
+        format: int64
+        description: The expiration date of the robot
+      permissions:
+        type: array
+        items:
+          $ref: "#/definitions/RobotPermission"
+      creation_time:
+        type: string
+        format: date-time
+        description: The creation time of the robot.
+      update_time:
+        type: string
+        format: date-time
+        description: The update time of the robot.
+  RobotCreate:
+    type: object
+    description: The request for robot account creation.
+    properties:
+      name:
+        type: string
+        description: The name of the robot
+      description:
+        type: string
+        description: The description of the robot
+      secret:
+        type: string
+        description: The secret of the robot
+      level:
+        type: string
+        description: The level of the robot, project or system
+      disable:
+        type: boolean
+        description: The disable status of the robot
+      duration:
+        type: integer
+        format: int64
+        description: The duration of the robot in days
+      permissions:
+        type: array
+        items:
+          $ref: "#/definitions/RobotPermission"
+  RobotCreated:
+    type: object
+    description: The response for robot account creation.
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: The ID of the robot
+      name:
+        type: string
+        description: The name of the robot
+      secret:
+        type: string
+        description: The secret of the robot
+      creation_time:
+        type: string
+        format: date-time
+        description: The creation time of the robot.
+      expires_at:
+        type: integer
+        format: int64
+        description: The expiration date of the robot
+  RobotSec:
+    type: object
+    description: The response for refresh/update robot account secret.
+    properties:
+      secret:
+        type: string
+        description: The secret of the robot
+  RobotPermission:
+    type: object
+    properties:
+      kind:
+        type: string
+        description: The kind of the permission
+      namespace:
+        type: string
+        description: The namespace of the permission
+      access:
+        type: array
+        items:
+          $ref: "#/definitions/Access"
+  Access:
+    type: object
+    properties:
+      resource:
+        type: string
+        description: The resource of the access. Possible resources are *, artifact, artifact-addition, artifact-label, audit-log, catalog, configuration, distribution, garbage-collection, helm-chart, helm-chart-version, helm-chart-version-label, immutable-tag, label, ldap-user, log, member, metadata, notification-policy, preheat-instance, preheat-policy, project, quota, registry, replication, replication-adapter, replication-policy, repository, robot, scan, scan-all, scanner, system-volumes, tag, tag-retention, user, user-group or "" (for self-reference).
+      action:
+        type: string
+        description: The action of the access. Possible actions are *, pull, push, create, read, update, delete, list, operate, scanner-pull and stop.
+      effect:
+        type: string
+        description: The effect of the access
+  ChartAPIError:
+    description: The error object returned by chart repository API
+    type: object
+    required:
+      - error
+    properties:
+      error:
+        type: string
+        description: The error message returned by the chart API
+  UnauthorizedChartAPIError:
+    description: Unauthorized
+    type: object
+    allOf:
+      - $ref: "#/definitions/ChartAPIError"
+  ForbiddenChartAPIError:
+    description: Operation is forbidden or quota exceeded
+    type: object
+    allOf:
+      - $ref: "#/definitions/ChartAPIError"
+  InternalChartAPIError:
+    description: Internal server error occurred
+    type: object
+    allOf:
+      - $ref: "#/definitions/ChartAPIError"
+  NotFoundChartAPIError:
+    description: Not found
+    type: object
+    allOf:
+      - $ref: "#/definitions/ChartAPIError"
+  InsufficientStorageChartAPIError:
+    description: Insufficient storage
+    type: object
+    allOf:
+      - $ref: "#/definitions/ChartAPIError"
+  BadRequestFormatedError:
+    description: Bad request
+    type: object
+    allOf:
+      - $ref: "#/definitions/ChartAPIError"
+  ConflictFormatedError:
+    description: Conflicts
+    type: object
+    allOf:
+      - $ref: "#/definitions/ChartAPIError"
+  Errors:
+    description: The error array that describe the errors got during the handling of request
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: "#/definitions/Error"
+  Error:
+    description: a model for all the error response coming from harbor
+    type: object
+    properties:
+      code:
+        type: string
+        description: The error code
+      message:
+        type: string
+        description: The error message
