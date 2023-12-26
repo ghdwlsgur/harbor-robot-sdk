@@ -7,7 +7,7 @@ SWAGGER_VERSION=latest
 SWAGGER := $(DOCKERCMD) run --rm -it -v $(HOME):$(HOME) -w $(shell pwd) quay.io/goswagger/swagger:$(SWAGGER_VERSION)
 
 HARBOR_SPEC=api/v2.0/swagger.yaml
-HARBOR_CLIENT_DIR=pkg/sdk/robots
+HARBOR_CLIENT_DIR=pkg/sdk/robot
 
 ## --------------------------------------
 ## Help

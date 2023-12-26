@@ -14,7 +14,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/ghdwlsgur/harbor-sdk/pkg/sdk/robots/models"
+	"github.com/ghdwlsgur/harbor-robot-sdk/pkg/sdk/robot/models"
 )
 
 // ListRobotReader is a Reader for the ListRobot structure.

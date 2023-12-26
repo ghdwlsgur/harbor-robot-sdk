@@ -1,4 +1,4 @@
-module github.com/ghdwlsgur/harbor-sdk
+module github.com/ghdwlsgur/harbor-robot-sdk
 
 go 1.21.3
 

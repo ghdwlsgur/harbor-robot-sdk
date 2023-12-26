@@ -15,7 +15,7 @@ import (
 	cr "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/ghdwlsgur/harbor-sdk/pkg/sdk/robots/models"
+	"github.com/ghdwlsgur/harbor-robot-sdk/pkg/sdk/robot/models"
 )
 
 // NewCreateRobotParams creates a new CreateRobotParams object,

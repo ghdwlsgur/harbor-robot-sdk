@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/ghdwlsgur/harbor-sdk/pkg/sdk/robots/models"
+	"github.com/ghdwlsgur/harbor-robot-sdk/pkg/sdk/robot/models"
 )
 
 // RefreshSecReader is a Reader for the RefreshSec structure.

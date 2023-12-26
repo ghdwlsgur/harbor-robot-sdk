@@ -10,7 +10,7 @@ import (
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
 
-	"github.com/ghdwlsgur/harbor-sdk/pkg/sdk/robots/client/robot"
+	"github.com/ghdwlsgur/harbor-robot-sdk/pkg/sdk/robot/client/robot"
 )
 
 // Default harbor API HTTP client.

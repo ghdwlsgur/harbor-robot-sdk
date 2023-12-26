@@ -16,7 +16,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/ghdwlsgur/harbor-sdk/pkg/sdk/robots/models"
+	"github.com/ghdwlsgur/harbor-robot-sdk/pkg/sdk/robot/models"
 )
 
 // NewRefreshSecParams creates a new RefreshSecParams object,
